@@ -12,5 +12,10 @@ namespace PasswordBook
     /// </summary>
     public partial class App : Application
     {
+        private void ApplicationStartup(object sender, StartupEventArgs e)
+        {
+            var mainWindowsFactory = new MainWindowFactory();
+            mainWindowsFactory.ShowDialog();
+        }
     }
 }
