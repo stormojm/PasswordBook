@@ -27,53 +27,58 @@ namespace PasswordBook.Model.Encryption
 
         public PasswordSheet DecryptFile()
         {
+            PasswordSheet decryptedData = null;
             FileStream stream = null;
-            StreamReader crStreamReader = null;
-            RijndaelManaged cryptic = null;
             PasswordDeriveBytes secretKey = null;
+            RijndaelManaged rijndaelCipher = null;
+            ICryptoTransform decryptor = null;
+            CryptoStream cryptoStream = null;
 
             try
             {
-                stream = new FileStream(_fileName, FileMode.Open, FileAccess.Read);
+                rijndaelCipher = new RijndaelManaged();
 
-                cryptic = new RijndaelManaged();
-
+                // Making of the key for decryption
                 secretKey = GetPasswordBytes();
 
-                ICryptoTransform decryptor = cryptic.CreateEncryptor(secretKey.GetBytes(32), secretKey.GetBytes(16));
-                var crStream = new CryptoStream(stream, decryptor, CryptoStreamMode.Read);
-                crStreamReader = new StreamReader(crStream);
+                // Creates a symmetric Rijndael decryptor object.
+                decryptor = rijndaelCipher.CreateDecryptor(secretKey.GetBytes(32), secretKey.GetBytes(16));
+                stream = new FileStream(_fileName, FileMode.Open, FileAccess.Read);
+                
+                // Defines the cryptographics stream for decryption.THe stream contains decrpted data
+                cryptoStream = new CryptoStream(stream, decryptor, CryptoStreamMode.Read);
 
                 XmlSerializer serializer = new XmlSerializer(typeof(PasswordSheet));
-                return (PasswordSheet)serializer.Deserialize(crStream);
+                decryptedData = (PasswordSheet)serializer.Deserialize(cryptoStream);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Console.Error.WriteLine(ex.Message);
             }
             finally
             {
+                if (stream != null)
+                {
+                    stream.Dispose();
+                }
+
                 if (secretKey != null)
                 {
                     secretKey.Dispose();
                 }
 
-                if (cryptic != null)
+                if (rijndaelCipher != null)
                 {
-                    cryptic.Dispose();
+                    rijndaelCipher.Dispose();
                 }
 
-                if (crStreamReader != null)
+                if (cryptoStream != null)
                 {
-                    crStreamReader.Dispose();
-                }
-
-                if (stream != null)
-                {
-                    stream.Dispose();
+                    cryptoStream.Dispose();
                 }
             }
 
-            return null;
+            return decryptedData;
         }
     }
 }

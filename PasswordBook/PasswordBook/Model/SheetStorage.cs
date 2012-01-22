@@ -12,7 +12,7 @@ namespace PasswordBook.Model.Encryption
     {        
         public static string GetFileLocation()
         {
-            return GetOrCreateDirectory();
+            return GetFileName();
         }
 
         private static string GetOrCreateDirectory()

@@ -4,6 +4,10 @@ using System.Configuration;
 using System.Data;
 using System.Linq;
 using System.Windows;
+using PasswordBook.Model;
+using Autofac;
+using PasswordBook.Contracts.Views;
+using PasswordBook.Contracts;
 
 namespace PasswordBook
 {
@@ -14,8 +18,14 @@ namespace PasswordBook
     {
         private void ApplicationStartup(object sender, StartupEventArgs e)
         {
-            var mainWindowsFactory = new MainWindowFactory();
-            mainWindowsFactory.ShowDialog();
+            var builder = new ContainerBuilder();
+            builder.RegisterModule(new PasswordBookModule());
+            var container = builder.Build();
+            var mainWindowView = container.Resolve<IMainWindowView>();
+            mainWindowView.ShowDialog();
+
+            var factory = container.Resolve<IPasswordSheetFactory>();
+            factory.SaveSheet();
         }
     }
 }

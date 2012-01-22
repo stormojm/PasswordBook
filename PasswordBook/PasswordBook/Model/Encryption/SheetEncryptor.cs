@@ -28,32 +28,40 @@ namespace PasswordBook.Model.Encryption
         public void EncryptFile(PasswordSheet sheet)
         {
             FileStream stream = null;
-            CryptoStream crStream = null;
-            RijndaelManaged cryptic = null;
-            MemoryStream movieStream = null;
             PasswordDeriveBytes secretKey = null;
+            RijndaelManaged rijndaelCipher = null;
+            ICryptoTransform encryptor = null;
+            CryptoStream cryptoStream = null;
 
             try
             {
-                XmlSerializer serializer = new XmlSerializer(typeof(PasswordSheet));
                 stream = new FileStream(_fileName, FileMode.OpenOrCreate, FileAccess.Write);
-
-                cryptic = new RijndaelManaged();
+                // stream.SetLength(0);
 
                 secretKey = GetPasswordBytes();
 
-                ICryptoTransform encryptor = cryptic.CreateEncryptor(secretKey.GetBytes(32), secretKey.GetBytes(16));
-                crStream = new CryptoStream(stream, encryptor, CryptoStreamMode.Write);
+                rijndaelCipher = new RijndaelManaged();
+                encryptor = rijndaelCipher.CreateEncryptor(secretKey.GetBytes(32), secretKey.GetBytes(16));
+                
+                // Defines a stream that links data streams to cryptographic transformations
+                cryptoStream = new CryptoStream(stream, encryptor, CryptoStreamMode.Write);
 
-                movieStream = new MemoryStream();
-                serializer.Serialize(movieStream, sheet);
+                byte[] data = null;
+                using (var sheetStream = new MemoryStream())
+                {
+                    XmlSerializer serializer = new XmlSerializer(typeof(PasswordSheet));
+                    serializer.Serialize(sheetStream, sheet);
 
-                byte[] data = movieStream.GetBuffer();
-                crStream.Write(data, 0, data.Length);
+                    data = sheetStream.GetBuffer();
+                }
+
+
+                cryptoStream.Write(data, 0, data.Length);
+                
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                Console.Error.WriteLine(ex.Message);
             }
             finally
             {
@@ -62,24 +70,14 @@ namespace PasswordBook.Model.Encryption
                     secretKey.Dispose();
                 }
 
-                if (movieStream != null)
+                if (rijndaelCipher != null)
                 {
-                    movieStream.Dispose();
+                    rijndaelCipher.Dispose();
                 }
 
-                if (cryptic != null)
+                if (cryptoStream != null)
                 {
-                    cryptic.Dispose();
-                }
-
-                if (crStream != null)
-                {
-                    crStream.Dispose();
-                }
-
-                if (stream != null)
-                {
-                    stream.Dispose();
+                    cryptoStream.Dispose();
                 }
             }
         }

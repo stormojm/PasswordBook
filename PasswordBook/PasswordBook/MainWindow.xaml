@@ -2,6 +2,7 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:pb="clr-namespace:PasswordBook"
+        xmlns:pbc="clr-namespace:PasswordBook.Contracts"
         Title="MainWindow" 
         UseLayoutRounding="True"
         TextOptions.TextFormattingMode="Display"
@@ -124,6 +125,10 @@
         <DataTemplate DataType="{x:Type pb:AddEntryViewModel}">
             <pb:AddEntryView DataContext="{Binding}" />
         </DataTemplate>
+        
+        <DataTemplate DataType="{x:Type pb:MasterPasswordEntryViewModel}">
+            <pb:MasterPasswordEntry DataContext="{Binding}"  />
+        </DataTemplate>
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -156,11 +161,36 @@
             </Grid>
         </Border>
 
-        <ItemsControl Grid.Row="1" ItemsSource="{Binding SearchResults}" />
-        
+        <ListBox Grid.Row="1"
+                 BorderThickness="0"
+                 ItemsSource="{Binding SearchResults}"
+                 SelectionMode="Single"
+                 SelectedItem="{Binding SelectedResult}"
+                 Grid.IsSharedSizeScope="True">
+            <ListBox.ItemTemplate>
+                <DataTemplate DataType="{x:Type pbc:PasswordEntry}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" SharedSizeGroup="TitleGroup" />
+                            <ColumnDefinition Width="Auto" SharedSizeGroup="UserNameGroup" />
+                            <ColumnDefinition Width="Auto" SharedSizeGroup="PasswordGroup"/>
+                        </Grid.ColumnDefinitions>
+                        
+                        <TextBlock Text="{Binding Title}" Grid.Column="0" Margin="0,0,5,0" />
+                        <TextBlock Text="{Binding UserName}" Grid.Column="1" Margin="0,0,5,0" />
+                        <TextBlock Text="{Binding Password}" Grid.Column="2" />
+                    </Grid>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
         <ContentControl Grid.Row="1" 
                         Content="{Binding AddEntryViewModel}"
                         Visibility="{Binding AddEntryViewModel.IsOpen, Converter={StaticResource BoolToVisibilityConverter}}"/>
+
+        <ContentControl Grid.Row="1" 
+                        Content="{Binding EditEntryViewModel}"
+                        Visibility="{Binding EditEntryViewModel.IsOpen, Converter={StaticResource BoolToVisibilityConverter}}"/>
 
         <ItemsControl Grid.Row="1" Grid.Column="1"
                       BorderThickness="1,0,0,0"
@@ -172,13 +202,20 @@
                 <Image Source="pack://application:,,,/Resources/Add.ico" />
             </Button>
             <Button ToolTip="Edit selected password entry"
-                    Style="{StaticResource ImageButtonStyle}">
+                    Style="{StaticResource ImageButtonStyle}"
+                    Command="{Binding EditCommand}">
                 <Image Source="pack://application:,,,/Resources/Edit.ico" />
             </Button>
             <Button ToolTip="Remove selected password entries"
-                    Style="{StaticResource ImageButtonStyle}">
+                    Style="{StaticResource ImageButtonStyle}"
+                    Command="{Binding RemoveCommand}">
                 <Image Source="pack://application:,,,/Resources/Delete.ico" />
             </Button>
         </ItemsControl>
+
+        <ContentControl Grid.RowSpan="3"
+                        Grid.ColumnSpan="2"
+                        Content="{Binding MasterPasswordEntryViewModel}"
+                        Visibility="{Binding MasterPasswordEntryViewModel.IsOpen, Converter={StaticResource BoolToVisibilityConverter}}" />
     </Grid>
 </Window>
