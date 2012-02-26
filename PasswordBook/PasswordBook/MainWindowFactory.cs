@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using PasswordBook.Model;
 using PasswordBook.Contracts.Views;
+using PasswordBook.Views.MainWindow;
 
 namespace PasswordBook
 {
@@ -19,7 +20,7 @@ namespace PasswordBook
         public void ShowDialog()
         {
             var viewModelInterface = _mainWindowViewModelFactory();
-            var view = new MainWindow(viewModelInterface);
+            var view = new MainWindowView(viewModelInterface);
 
             view.ShowDialog();
         }

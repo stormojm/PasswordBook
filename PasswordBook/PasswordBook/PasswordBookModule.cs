@@ -7,6 +7,9 @@ using PasswordBook.Model;
 using PasswordBook.Contracts;
 using PasswordBook.Contracts.Views;
 using PasswordBook.Core;
+using PasswordBook.Views.AddEditEntry;
+using PasswordBook.Views.MainWindow;
+using PasswordBook.Views.MasterPasswordEntry;
 
 namespace PasswordBook
 {
@@ -20,27 +23,27 @@ namespace PasswordBook
 
             builder.Register(c => new MainWindowViewModel(
                                     c.Resolve<IEnumerable<IViewModelBehavior<MainWindowViewModel>>>(),
-                                    c.ResolveNamed<AddEntryViewModel>("addEntry"),
-                                    c.ResolveNamed<AddEntryViewModel>("editEntry"),
+                                    c.ResolveNamed<AddEditEntryViewModel>("addEntry"),
+                                    c.ResolveNamed<AddEditEntryViewModel>("editEntry"),
                                     c.Resolve<MasterPasswordEntryViewModel>()))
                 .AsSelf()
                 .InstancePerDependency();
 
-            builder.Register(c => new AddEntryViewModel(new [] { c.Resolve<AddEntryViewModelLogic>() } ))
-                .Named<AddEntryViewModel>("addEntry")
+            builder.Register(c => new AddEditEntryViewModel(new[] { c.Resolve<AddEntryViewModelBehavior>() }))
+                .Named<AddEditEntryViewModel>("addEntry")
                 .InstancePerDependency();
 
-            builder.Register(c => new AddEntryViewModel(new[] { c.Resolve<EditEntryViewModelBehavior>() }))
-                .Named<AddEntryViewModel>("editEntry")
+            builder.Register(c => new AddEditEntryViewModel(new[] { c.Resolve<EditEntryViewModelBehavior>() }))
+                .Named<AddEditEntryViewModel>("editEntry")
                 .InstancePerDependency();
 
             builder.Register(c => new EditEntryViewModelBehavior(c.Resolve<IPasswordSheetFactory>()))
-                .As<IViewModelBehavior<AddEntryViewModel>>()
+                .As<IViewModelBehavior<AddEditEntryViewModel>>()
                 .AsSelf()
                 .InstancePerDependency();
 
-            builder.Register(c => new AddEntryViewModelLogic(c.Resolve<IPasswordSheetFactory>()))
-                .As<IViewModelBehavior<AddEntryViewModel>>()
+            builder.Register(c => new AddEntryViewModelBehavior(c.Resolve<IPasswordSheetFactory>()))
+                .As<IViewModelBehavior<AddEditEntryViewModel>>()
                 .AsSelf()
                 .InstancePerDependency();
 
@@ -48,11 +51,11 @@ namespace PasswordBook
                 .As<IMainWindowView>()
                 .InstancePerDependency();
 
-            builder.Register(c => new MainWindowViewModelLogic(c.Resolve<IPasswordSheetFactory>()))
+            builder.Register(c => new MainSideBarViewModelBehavior(c.Resolve<IPasswordSheetFactory>()))
                 .As<IViewModelBehavior<MainWindowViewModel>>()
                 .InstancePerDependency();
 
-            builder.Register(c => new SearchResultsViewModelLogic(c.Resolve<IEventAggregator>(), c.Resolve<IPasswordSheetFactory>()))
+            builder.Register(c => new SearchResultsViewModelBehavior(c.Resolve<IEventAggregator>(), c.Resolve<IPasswordSheetFactory>()))
                 .As<IViewModelBehavior<MainWindowViewModel>>()
                 .InstancePerDependency();
 

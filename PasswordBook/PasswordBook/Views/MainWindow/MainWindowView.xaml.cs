@@ -1,10 +1,8 @@
-﻿using PasswordBook.Model;
-using PasswordBook.Model.Encryption;
-namespace PasswordBook
+﻿namespace PasswordBook.Views.MainWindow
 {
-    public partial class MainWindow
+    public partial class MainWindowView
     {
-        public MainWindow(MainWindowViewModel viewModel)
+        public MainWindowView(MainWindowViewModel viewModel)
         {
             DataContext = viewModel;
             InitializeComponent();

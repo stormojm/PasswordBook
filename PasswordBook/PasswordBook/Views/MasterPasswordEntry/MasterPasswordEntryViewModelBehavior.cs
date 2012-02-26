@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using PasswordBook.Model;
 using PasswordBook.Contracts;
 using PasswordBook.Messages;
 
-namespace PasswordBook
+namespace PasswordBook.Views.MasterPasswordEntry
 {
     public class MasterPasswordEntryViewModelBehavior : IViewModelBehavior<MasterPasswordEntryViewModel>
     {

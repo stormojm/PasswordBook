@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Input;
 using PasswordBook.Contracts;
 
-namespace PasswordBook
+namespace PasswordBook.Views.AddEditEntry
 {
-    public class AddEntryViewModel : INotifyPropertyChanged
+    public class AddEditEntryViewModel : INotifyPropertyChanged
     {
         private bool _isOpen;
         private string _userName;
@@ -16,7 +13,7 @@ namespace PasswordBook
         private string _title;
         private PasswordEntry _item;
 
-        public AddEntryViewModel(IEnumerable<IViewModelBehavior<AddEntryViewModel>> behaviors)
+        public AddEditEntryViewModel(IEnumerable<IViewModelBehavior<AddEditEntryViewModel>> behaviors)
         {
             behaviors.InitializeAll(this);
         }

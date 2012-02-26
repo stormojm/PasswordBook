@@ -1,14 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows.Input;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using PasswordBook.Model;
 using System.ComponentModel;
+using System.Windows.Input;
 using PasswordBook.Contracts;
+using PasswordBook.Views.AddEditEntry;
+using PasswordBook.Views.MasterPasswordEntry;
 
-namespace PasswordBook
+namespace PasswordBook.Views.MainWindow
 {
     public class MainWindowViewModel : INotifyPropertyChanged
     {
@@ -16,8 +14,8 @@ namespace PasswordBook
 
         public MainWindowViewModel(
             IEnumerable<IViewModelBehavior<MainWindowViewModel>> behaviors,
-            AddEntryViewModel addEntryViewModel,
-            AddEntryViewModel editEntryViewModel,
+            AddEditEntryViewModel addEntryViewModel,
+            AddEditEntryViewModel editEntryViewModel,
             MasterPasswordEntryViewModel masterPassword)
         {
             AddEntryViewModel = addEntryViewModel;
@@ -48,9 +46,9 @@ namespace PasswordBook
             }
         }
 
-        public AddEntryViewModel EditEntryViewModel { get; set; }
+        public AddEditEntryViewModel EditEntryViewModel { get; set; }
 
-        public AddEntryViewModel AddEntryViewModel { get; set; }
+        public AddEditEntryViewModel AddEntryViewModel { get; set; }
 
         public MasterPasswordEntryViewModel MasterPasswordEntryViewModel { get; set; }
 

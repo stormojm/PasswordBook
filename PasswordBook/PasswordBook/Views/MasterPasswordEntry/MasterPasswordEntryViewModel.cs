@@ -7,7 +7,7 @@ using System.Windows.Input;
 using System.Security;
 using System.Windows;
 
-namespace PasswordBook
+namespace PasswordBook.Views.MasterPasswordEntry
 {
     public class MasterPasswordEntryViewModel : INotifyPropertyChanged
     {

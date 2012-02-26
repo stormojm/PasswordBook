@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="PasswordBook.AddEntryView"
+﻿<UserControl x:Class="PasswordBook.Views.AddEditEntry.AddEditEntryView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              Background="White">

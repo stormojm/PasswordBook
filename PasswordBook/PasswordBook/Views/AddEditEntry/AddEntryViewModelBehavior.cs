@@ -1,22 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using PasswordBook.Contracts;
 
-namespace PasswordBook
+namespace PasswordBook.Views.AddEditEntry
 {
-    public class AddEntryViewModelLogic : IViewModelBehavior<AddEntryViewModel>
+    public class AddEntryViewModelBehavior : IViewModelBehavior<AddEditEntryViewModel>
     {
-        private AddEntryViewModel _addEntryViewModel;
+        private AddEditEntryViewModel _addEntryViewModel;
         private readonly IPasswordSheetFactory _passwordSheet;
 
-        public AddEntryViewModelLogic(IPasswordSheetFactory passwordSheet)
+        public AddEntryViewModelBehavior(IPasswordSheetFactory passwordSheet)
         {
             _passwordSheet = passwordSheet;
         }
 
-        public void Initialize(AddEntryViewModel addEntryViewModel)
+        public void Initialize(AddEditEntryViewModel addEntryViewModel)
         {
             _addEntryViewModel = addEntryViewModel;
             _addEntryViewModel.SaveCommand = new RelayCommand(Save, CanSave);

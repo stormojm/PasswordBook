@@ -1,20 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
 using PasswordBook.Contracts;
 using PasswordBook.Messages;
-using System.Collections.ObjectModel;
 
-namespace PasswordBook
+namespace PasswordBook.Views.MainWindow
 {
-    public class SearchResultsViewModelLogic : IViewModelBehavior<MainWindowViewModel>
+    public class SearchResultsViewModelBehavior : IViewModelBehavior<MainWindowViewModel>
     {
         private MainWindowViewModel _viewModel;
         private IEventAggregator _eventBroker;
         private IPasswordSheetFactory _passwordSheetFactory;
 
-        public SearchResultsViewModelLogic(IEventAggregator eventBroker, IPasswordSheetFactory passwordSheetFactory)
+        public SearchResultsViewModelBehavior(IEventAggregator eventBroker, IPasswordSheetFactory passwordSheetFactory)
         {
             _eventBroker = eventBroker;
             _passwordSheetFactory = passwordSheetFactory;

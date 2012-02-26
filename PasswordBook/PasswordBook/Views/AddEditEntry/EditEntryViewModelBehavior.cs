@@ -1,15 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using PasswordBook.Contracts;
-using System.ComponentModel;
 
-namespace PasswordBook
+namespace PasswordBook.Views.AddEditEntry
 {
-    public class EditEntryViewModelBehavior : IViewModelBehavior<AddEntryViewModel>
+    public class EditEntryViewModelBehavior : IViewModelBehavior<AddEditEntryViewModel>
     {
-        private AddEntryViewModel _viewModel;
+        private AddEditEntryViewModel _viewModel;
         private IPasswordSheetFactory _passwordSheet;
 
         public EditEntryViewModelBehavior(IPasswordSheetFactory passwordSheet)
@@ -17,7 +13,7 @@ namespace PasswordBook
             _passwordSheet = passwordSheet;
         }
 
-        public void Initialize(AddEntryViewModel viewModel)
+        public void Initialize(AddEditEntryViewModel viewModel)
         {
             _viewModel = viewModel;
             _viewModel.SaveCommand = new RelayCommand(Save, CanSave);

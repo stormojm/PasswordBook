@@ -1,19 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Collections.ObjectModel;
-using PasswordBook.Model;
-using PasswordBook.Contracts;
+﻿using PasswordBook.Contracts;
 
-namespace PasswordBook
+namespace PasswordBook.Views.MainWindow
 {
-    public class MainWindowViewModelLogic : IViewModelBehavior<MainWindowViewModel>
+    public class MainSideBarViewModelBehavior : IViewModelBehavior<MainWindowViewModel>
     {
         private MainWindowViewModel _viewModel;
         private IPasswordSheetFactory _passwordSheetFactory;
 
-        public MainWindowViewModelLogic(IPasswordSheetFactory passwordSheetFactory)
+        public MainSideBarViewModelBehavior(IPasswordSheetFactory passwordSheetFactory)
         {
             _passwordSheetFactory = passwordSheetFactory;
         }
