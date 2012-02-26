@@ -6,6 +6,7 @@ using Autofac;
 using PasswordBook.Model;
 using PasswordBook.Contracts;
 using PasswordBook.Contracts.Views;
+using PasswordBook.Core;
 
 namespace PasswordBook
 {
@@ -51,18 +52,22 @@ namespace PasswordBook
                 .As<IViewModelBehavior<MainWindowViewModel>>()
                 .InstancePerDependency();
 
-            builder.Register(c => new MasterPasswordEntryViewModelBehavior(c.Resolve<IPasswordSheetFactory>()))
+            builder.Register(c => new SearchResultsViewModelLogic(c.Resolve<IEventAggregator>(), c.Resolve<IPasswordSheetFactory>()))
+                .As<IViewModelBehavior<MainWindowViewModel>>()
+                .InstancePerDependency();
+
+            builder.Register(c => new MasterPasswordEntryViewModelBehavior(c.Resolve<IPasswordSheetFactory>(), c.Resolve<IEventAggregator>()))
                 .As<IViewModelBehavior<MasterPasswordEntryViewModel>>()
+                .AsSelf()
                 .InstancePerDependency();
 
             builder.Register(c => new MasterPasswordEntryViewModel(c.Resolve<IEnumerable<IViewModelBehavior<MasterPasswordEntryViewModel>>>()))
                 .AsSelf()
                 .InstancePerDependency();
 
-            builder.Register(c => new MasterPasswordEntryViewModelBehavior(
-                                    c.Resolve<IPasswordSheetFactory>()))
-                .AsSelf()
-                .InstancePerDependency();
+            builder.Register(c => new EventAggregator())
+                .As<IEventAggregator>()
+                .SingleInstance();
         }
     }
 }

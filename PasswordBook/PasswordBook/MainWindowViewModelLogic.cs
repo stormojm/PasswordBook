@@ -22,10 +22,13 @@ namespace PasswordBook
         {
             _viewModel = viewModel;
 
-            _viewModel.SearchCommand = new RelayCommand(Search);
             _viewModel.AddCommand = new RelayCommand(ShowAddPanel, obj => !_viewModel.AddEntryViewModel.IsOpen);
             _viewModel.EditCommand = new RelayCommand(ShowEditPanel, CanEditItems);
             _viewModel.RemoveCommand = new RelayCommand(RemoveItems, CanRemoveItems);
+        }
+
+        private void OnMasterPasswordEntered()
+        {
         }
 
         private void ShowAddPanel(object parameter)
@@ -43,17 +46,6 @@ namespace PasswordBook
         {
             _viewModel.EditEntryViewModel.Item = _viewModel.SelectedResult;
             _viewModel.EditEntryViewModel.IsOpen = true;
-        }
-
-        private void Search(object parameter)
-        {
-            IEnumerable<PasswordEntry> searchResults = _passwordSheetFactory.Get().GetAll();
-            if (!String.IsNullOrEmpty(_viewModel.SearchText))
-            {
-                searchResults = searchResults.Where(entry => entry.Title.Contains(_viewModel.SearchText));
-            }
-
-            _viewModel.SearchResults = new ObservableCollection<PasswordEntry>(searchResults);
         }
 
         private void RemoveItems(object parameter)

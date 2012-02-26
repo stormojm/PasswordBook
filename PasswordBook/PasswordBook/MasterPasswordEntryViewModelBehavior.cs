@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using PasswordBook.Model;
 using PasswordBook.Contracts;
+using PasswordBook.Messages;
 
 namespace PasswordBook
 {
@@ -11,13 +12,15 @@ namespace PasswordBook
     {
         private MasterPasswordEntryViewModel _viewModel;
         private IPasswordSheetFactory _passwordSheetFactory;
+        private IEventAggregator _eventBroker;
 
         private static int _InstanceCount;
 
-        public MasterPasswordEntryViewModelBehavior(IPasswordSheetFactory passwordSheetFactory)
+        public MasterPasswordEntryViewModelBehavior(IPasswordSheetFactory passwordSheetFactory, IEventAggregator eventBroker)
         {
             _InstanceCount++;
             _passwordSheetFactory = passwordSheetFactory;
+            _eventBroker = eventBroker;
         }
 
         public void Initialize(MasterPasswordEntryViewModel viewModel)
@@ -34,6 +37,7 @@ namespace PasswordBook
             {
                 _viewModel.ErrorMessage = String.Empty;
                 _viewModel.IsOpen = false;
+                _eventBroker.Send(new MasterPasswordEntered());
             }
             else
             {
