@@ -12,6 +12,8 @@ namespace PasswordBook
 {
     public class MainWindowViewModel : INotifyPropertyChanged
     {
+        private string _searchText;
+
         public MainWindowViewModel(
             IEnumerable<IViewModelBehavior<MainWindowViewModel>> behaviors,
             AddEntryViewModel addEntryViewModel,
@@ -35,6 +37,16 @@ namespace PasswordBook
         public ICommand EditCommand { get; set; }
 
         public ICommand RemoveCommand { get; set; }
+
+        public string SearchText
+        {
+            get { return _searchText; }
+            set
+            {
+                _searchText = value;
+                OnPropertyChanged("SearchText");
+            }
+        }
 
         public AddEntryViewModel EditEntryViewModel { get; set; }
 

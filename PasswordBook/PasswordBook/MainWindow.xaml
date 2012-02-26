@@ -151,7 +151,8 @@
                 </Grid.ColumnDefinitions>
                 
                 <TextBox Grid.Column="0"
-                         VerticalContentAlignment="Center" />
+                         VerticalContentAlignment="Center"
+                         Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                 <Button Content="Search"
                         Style="{StaticResource SearchButtonStyle}"
                         Grid.Column="1"
@@ -167,6 +168,13 @@
                  SelectionMode="Single"
                  SelectedItem="{Binding SelectedResult}"
                  Grid.IsSharedSizeScope="True">
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="{x:Type ListBoxItem}">
+                    <Setter Property="Height" Value="30" />
+                    <Setter Property="BorderThickness" Value="0,0,0,1" />
+                    <Setter Property="BorderBrush" Value="#EFEFEF" />
+                </Style>
+            </ListBox.ItemContainerStyle>
             <ListBox.ItemTemplate>
                 <DataTemplate DataType="{x:Type pbc:PasswordEntry}">
                     <Grid>

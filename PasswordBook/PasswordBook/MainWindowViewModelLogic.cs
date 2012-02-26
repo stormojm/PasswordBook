@@ -47,7 +47,13 @@ namespace PasswordBook
 
         private void Search(object parameter)
         {
-            _viewModel.SearchResults = new ObservableCollection<PasswordEntry>(_passwordSheetFactory.Get().GetAll());
+            IEnumerable<PasswordEntry> searchResults = _passwordSheetFactory.Get().GetAll();
+            if (!String.IsNullOrEmpty(_viewModel.SearchText))
+            {
+                searchResults = searchResults.Where(entry => entry.Title.Contains(_viewModel.SearchText));
+            }
+
+            _viewModel.SearchResults = new ObservableCollection<PasswordEntry>(searchResults);
         }
 
         private void RemoveItems(object parameter)
