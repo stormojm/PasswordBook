@@ -37,7 +37,7 @@ namespace PasswordBook.Views.MasterPasswordEntry
             }
             else
             {
-                _viewModel.ErrorMessage = "Unable to create";
+                _viewModel.ErrorMessage = "Invalid Password";
             }
         }
     }

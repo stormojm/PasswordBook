@@ -5,11 +5,12 @@
         xmlns:pbc="clr-namespace:PasswordBook.Contracts"
         xmlns:pbae="clr-namespace:PasswordBook.Views.AddEditEntry"
         xmlns:pbmp="clr-namespace:PasswordBook.Views.MasterPasswordEntry"
-        Title="MainWindow" 
+        Icon="pack://application:,,,/Resources/ApplicationIcon.ico"
+        Title="Password Book" 
         UseLayoutRounding="True"
         TextOptions.TextFormattingMode="Display"
-        Height="350"
-        Width="525">
+        Height="350" Width="525"
+        MinWidth="300" MinHeight="200">
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter" />
         
@@ -154,8 +155,11 @@
                 
                 <TextBox Grid.Column="0"
                          VerticalContentAlignment="Center"
+                         GotFocus="TextBoxGotFocus"
+                         LostFocus="TextBoxLostFocus"
                          Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                 <Button Content="Search"
+                        x:Name="searchButton"
                         Style="{StaticResource SearchButtonStyle}"
                         Grid.Column="1"
                         Height="29" Width="82"
