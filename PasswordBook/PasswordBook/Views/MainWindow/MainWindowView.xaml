@@ -214,6 +214,85 @@
                   SelectionUnit="FullRow"
                   IsReadOnly="True"
                   Background="White">
+            <DataGrid.Resources>
+                <Style x:Key="ScrollBarPageButton" TargetType="{x:Type RepeatButton}">
+                    <Setter Property="SnapsToDevicePixels" Value="True" />
+                    <Setter Property="OverridesDefaultStyle" Value="true" />
+                    <Setter Property="IsTabStop" Value="false" />
+                    <Setter Property="Focusable" Value="false" />
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type RepeatButton}">
+                                <Border Background="Transparent" />
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+
+                <Style x:Key="ScrollBarThumb" TargetType="{x:Type Thumb}">
+                    <Setter Property="SnapsToDevicePixels" Value="True" />
+                    <Setter Property="OverridesDefaultStyle" Value="true" />
+                    <Setter Property="IsTabStop" Value="false" />
+                    <Setter Property="Focusable" Value="false" />
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type Thumb}">
+                                <Border x:Name="ThumbBorder"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="1,1,0,1" />
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter TargetName="ThumbBorder" Property="Background" Value="#909090" />
+                                        <Setter TargetName="ThumbBorder" Property="BorderBrush" Value="#666666" />
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+
+                <ControlTemplate x:Key="VerticalScrollBar" TargetType="{x:Type ScrollBar}">
+                    <Grid>
+                        <Border x:Name="TrackBorder"
+                        BorderThickness="1,0,0,0"
+                        BorderBrush="Transparent"
+                        Background="Transparent" />
+
+                        <Track x:Name="PART_Track" Grid.Row="0" IsDirectionReversed="true" Margin="0,-1,-1,-1">
+                            <Track.DecreaseRepeatButton>
+                                <RepeatButton Style="{StaticResource ScrollBarPageButton}" Command="ScrollBar.PageUpCommand" />
+                            </Track.DecreaseRepeatButton>
+                            <Track.Thumb>
+                                <Thumb x:Name="TrackThumb" 
+                               Style="{StaticResource ScrollBarThumb}"
+                               BorderBrush="#B6B6B6"
+                               Background="#CBCBCB" />
+                            </Track.Thumb>
+                            <Track.IncreaseRepeatButton>
+                                <RepeatButton Style="{StaticResource ScrollBarPageButton}" Command="ScrollBar.PageDownCommand" />
+                            </Track.IncreaseRepeatButton>
+                        </Track>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" TargetName="TrackBorder" Value="#F2F2F2" />
+                            <Setter Property="BorderBrush" TargetName="TrackBorder" Value="#D9D9D9" />
+                            <Setter Property="Background" TargetName="TrackThumb" Value="#C0C0C0" />
+                            <Setter Property="BorderBrush" TargetName="TrackThumb" Value="#9A9A9A" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+
+                <Style x:Key="{x:Type ScrollBar}" TargetType="{x:Type ScrollBar}">
+                    <Setter Property="SnapsToDevicePixels" Value="True" />
+                    <Setter Property="OverridesDefaultStyle" Value="true" />
+                    <Setter Property="Orientation" Value="Vertical" />
+                    <Setter Property="Width" Value="12" />
+                    <Setter Property="Height" Value="Auto" />
+                    <Setter Property="Template" Value="{StaticResource VerticalScrollBar}" />
+                </Style>
+            </DataGrid.Resources>
             <DataGrid.RowStyle>
                 <Style TargetType="DataGridRow">
                     <Setter Property="Height" Value="30" />
@@ -255,7 +334,7 @@
             <Button ToolTip="Edit selected password entry"
                     Style="{StaticResource ImageButtonStyle}"
                     Command="{Binding EditCommand}">
-                <Image Source="pack://application:,,,/Resources/Edit.ico" Margin="2,0,0,0" />
+                <Image Source="pack://application:,,,/Resources/Edit.ico" Margin="7,0,0,0" />
             </Button>
             <Button ToolTip="Remove selected password entries"
                     Style="{StaticResource ImageButtonStyle}"
