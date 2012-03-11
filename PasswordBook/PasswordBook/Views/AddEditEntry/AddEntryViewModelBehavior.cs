@@ -1,5 +1,6 @@
 ﻿using System;
 using PasswordBook.Contracts;
+using PasswordBook.Messages;
 
 namespace PasswordBook.Views.AddEditEntry
 {
@@ -7,10 +8,12 @@ namespace PasswordBook.Views.AddEditEntry
     {
         private AddEditEntryViewModel _addEntryViewModel;
         private readonly IPasswordSheetFactory _passwordSheet;
+        private readonly IEventAggregator _eventAggregator;
 
-        public AddEntryViewModelBehavior(IPasswordSheetFactory passwordSheet)
+        public AddEntryViewModelBehavior(IPasswordSheetFactory passwordSheet, IEventAggregator eventAggregator)
         {
             _passwordSheet = passwordSheet;
+            _eventAggregator = eventAggregator;
         }
 
         public void Initialize(AddEditEntryViewModel addEntryViewModel)
@@ -57,6 +60,7 @@ namespace PasswordBook.Views.AddEditEntry
             _addEntryViewModel.Password = String.Empty;
             _addEntryViewModel.UserName = String.Empty;
             _addEntryViewModel.Title = String.Empty;
+            _eventAggregator.Send(new RefreshSearch());
         }
     }
 }

@@ -16,13 +16,9 @@ namespace PasswordBook.Views.MainWindow
         {
             _viewModel = viewModel;
 
-            _viewModel.AddCommand = new RelayCommand(ShowAddPanel, obj => !_viewModel.AddEntryViewModel.IsOpen);
+            _viewModel.AddCommand = new RelayCommand(ShowAddPanel, CanAddItems);
             _viewModel.EditCommand = new RelayCommand(ShowEditPanel, CanEditItems);
             _viewModel.RemoveCommand = new RelayCommand(RemoveItems, CanRemoveItems);
-        }
-
-        private void OnMasterPasswordEntered()
-        {
         }
 
         private void ShowAddPanel(object parameter)
@@ -32,7 +28,8 @@ namespace PasswordBook.Views.MainWindow
 
         private bool CanEditItems(object parameter)
         {
-            return !_viewModel.EditEntryViewModel.IsOpen
+            return !_viewModel.AddEntryViewModel.IsOpen
+                && !_viewModel.EditEntryViewModel.IsOpen
                 && _viewModel.SelectedResult != null;
         }
 
@@ -52,7 +49,15 @@ namespace PasswordBook.Views.MainWindow
 
         private bool CanRemoveItems(object parameter)
         {
-            return _viewModel.SelectedResult != null;
+            return !_viewModel.AddEntryViewModel.IsOpen
+                && !_viewModel.EditEntryViewModel.IsOpen
+                && _viewModel.SelectedResult != null;
+        }
+
+        private bool CanAddItems(object parameter)
+        {
+            return !_viewModel.AddEntryViewModel.IsOpen
+                && !_viewModel.EditEntryViewModel.IsOpen;
         }
     }
 }

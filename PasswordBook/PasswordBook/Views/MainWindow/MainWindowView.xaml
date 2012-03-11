@@ -18,11 +18,9 @@
             <Setter Property="Control.Template">
                 <Setter.Value>
                     <ControlTemplate>
-                        <Rectangle Margin="2"
-                               StrokeThickness="1"
-                               Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"
-                               StrokeDashArray="1 2"
-                               SnapsToDevicePixels="true"/>
+                        <Rectangle StrokeThickness="1"
+                                   Stroke="#4D90FE"
+                                   SnapsToDevicePixels="true"/>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
@@ -42,6 +40,7 @@
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="Foreground" Value="White" />
             <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="FontSize" Value="15" />
             <Setter Property="HorizontalContentAlignment" Value="Center"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
             <Setter Property="Padding" Value="1"/>
@@ -82,14 +81,29 @@
 
         <Style x:Key="ImageButtonStyle" TargetType="{x:Type ButtonBase}">
             <Setter Property="FocusVisualStyle" Value="{StaticResource ButtonFocusVisual}"/>
-            <Setter Property="Background" Value="Transparent" />
-            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Background">
+                <Setter.Value>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                        <GradientStop Color="WhiteSmoke" Offset="0" />
+                        <GradientStop Color="#F1F1F1" Offset="1" />
+                    </LinearGradientBrush>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="#D9D9D9"/>
             <Setter Property="Foreground" Value="White" />
             <Setter Property="FontWeight" Value="SemiBold" />
             <Setter Property="HorizontalContentAlignment" Value="Center"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
             <Setter Property="Padding" Value="3"/>
-            <Setter Property="Margin" Value="1"/>
+            <Setter Property="Margin" Value="3"/>
+            <Setter Property="Height" Value="27" />
+            <Setter Property="Width" Value="54" />
+            <Setter Property="RenderTransform">
+                <Setter.Value>
+                    <TranslateTransform X="0" Y="0" />
+                </Setter.Value>
+            </Setter>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type ButtonBase}">
@@ -102,22 +116,37 @@
                                               VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
                                               HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                                               RecognizesAccessKey="True"
-                                              SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                                              SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="BorderBrush" Value="#2F5BB7" />
+                                <Setter Property="BorderBrush" Value="#C6C6C6" />
                                 <Setter Property="Background">
                                     <Setter.Value>
                                         <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                                            <GradientStop Color="#4D90FE" Offset="0" />
-                                            <GradientStop Color="#357AE8" Offset="1" />
+                                            <GradientStop Color="#F8F8F8" Offset="0" />
+                                            <GradientStop Color="#F1F1F1" Offset="1" />
                                         </LinearGradientBrush>
                                     </Setter.Value>
                                 </Setter>
                             </Trigger>
                             <Trigger Property="IsEnabled" Value="False">
-                                <Setter Property="Foreground" Value="#ADADAD"/>
+                                <Trigger.EnterActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation To="0" Storyboard.TargetProperty="Opacity" Duration="0:0:0.2"/>
+                                            <DoubleAnimation To="10" Storyboard.TargetProperty="RenderTransform.(TranslateTransform.X)" Duration="0:0:0.2" />
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.EnterActions>
+                                <Trigger.ExitActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation To="1" Storyboard.TargetProperty="Opacity" Duration="0:0:0.2"/>
+                                            <DoubleAnimation To="0" Storyboard.TargetProperty="RenderTransform.(TranslateTransform.X)" Duration="0:0:0.2" />
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.ExitActions>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -125,12 +154,18 @@
             </Setter>
         </Style>
 
+        <Style x:Key="VerticalElementStyle" TargetType="TextBlock">
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="TextTrimming" Value="CharacterEllipsis" />
+            <Setter Property="Margin" Value="0,0,3,0" />
+        </Style>
+
         <DataTemplate DataType="{x:Type pbae:AddEditEntryViewModel}">
             <pbae:AddEditEntryView DataContext="{Binding}" />
         </DataTemplate>
 
         <DataTemplate DataType="{x:Type pbmp:MasterPasswordEntryViewModel}">
-            <pbmp:MasterPasswordEntryView DataContext="{Binding}"  />
+            <pbmp:MasterPasswordEntryView DataContext="{Binding}" />
         </DataTemplate>
     </Window.Resources>
     <Grid>
@@ -167,36 +202,38 @@
                         Command="{Binding SearchCommand}" />
             </Grid>
         </Border>
-
-        <ListBox Grid.Row="1"
-                 BorderThickness="0"
-                 ItemsSource="{Binding SearchResults}"
-                 SelectionMode="Single"
-                 SelectedItem="{Binding SelectedResult}"
-                 Grid.IsSharedSizeScope="True">
-            <ListBox.ItemContainerStyle>
-                <Style TargetType="{x:Type ListBoxItem}">
+        
+        <DataGrid Grid.Row="1"
+                  BorderThickness="0"
+                  ItemsSource="{Binding SearchResults}"
+                  AutoGenerateColumns="False"
+                  SelectionMode="Single"
+                  SelectedItem="{Binding SelectedResult}"
+                  HeadersVisibility="None"
+                  GridLinesVisibility="None"
+                  SelectionUnit="FullRow"
+                  IsReadOnly="True"
+                  Background="White">
+            <DataGrid.RowStyle>
+                <Style TargetType="DataGridRow">
                     <Setter Property="Height" Value="30" />
                     <Setter Property="BorderThickness" Value="0,0,0,1" />
                     <Setter Property="BorderBrush" Value="#EFEFEF" />
+                    <EventSetter Event="MouseDoubleClick" Handler="ItemDoubleClick" />
                 </Style>
-            </ListBox.ItemContainerStyle>
-            <ListBox.ItemTemplate>
-                <DataTemplate DataType="{x:Type pbc:PasswordEntry}">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" SharedSizeGroup="TitleGroup" />
-                            <ColumnDefinition Width="Auto" SharedSizeGroup="UserNameGroup" />
-                            <ColumnDefinition Width="Auto" SharedSizeGroup="PasswordGroup"/>
-                        </Grid.ColumnDefinitions>
-                        
-                        <TextBlock Text="{Binding Title}" Grid.Column="0" Margin="0,0,5,0" />
-                        <TextBlock Text="{Binding UserName}" Grid.Column="1" Margin="0,0,5,0" />
-                        <TextBlock Text="{Binding Password}" Grid.Column="2" />
-                    </Grid>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
+            </DataGrid.RowStyle>
+            <DataGrid.CellStyle>
+                <Style TargetType="DataGridCell">
+                    <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+                    <Setter Property="BorderThickness" Value="0" />
+                </Style>
+            </DataGrid.CellStyle>
+            <DataGrid.Columns>
+                <DataGridTextColumn Binding="{Binding Title}" Width="*" ElementStyle="{StaticResource VerticalElementStyle}" />
+                <DataGridTextColumn Binding="{Binding UserName}" Width="*" MaxWidth="90" ElementStyle="{StaticResource VerticalElementStyle}" />
+                <DataGridTextColumn Binding="{Binding Password}" Width="*" MaxWidth="90" ElementStyle="{StaticResource VerticalElementStyle}"/>
+            </DataGrid.Columns>
+        </DataGrid>
 
         <ContentControl Grid.Row="1" 
                         Content="{Binding AddEntryViewModel}"
@@ -209,7 +246,7 @@
         <ItemsControl Grid.Row="1" Grid.Column="1"
                       BorderThickness="1,0,0,0"
                       BorderBrush="#E5E5E5"
-                      Width="30">
+                      Focusable="False">
             <Button ToolTip="Add a new password entry"
                     Style="{StaticResource ImageButtonStyle}"
                     Command="{Binding AddCommand}">
@@ -218,7 +255,7 @@
             <Button ToolTip="Edit selected password entry"
                     Style="{StaticResource ImageButtonStyle}"
                     Command="{Binding EditCommand}">
-                <Image Source="pack://application:,,,/Resources/Edit.ico" />
+                <Image Source="pack://application:,,,/Resources/Edit.ico" Margin="2,0,0,0" />
             </Button>
             <Button ToolTip="Remove selected password entries"
                     Style="{StaticResource ImageButtonStyle}"

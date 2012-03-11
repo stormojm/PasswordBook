@@ -37,12 +37,12 @@ namespace PasswordBook
                 .Named<AddEditEntryViewModel>("editEntry")
                 .InstancePerDependency();
 
-            builder.Register(c => new EditEntryViewModelBehavior(c.Resolve<IPasswordSheetFactory>()))
+            builder.Register(c => new EditEntryViewModelBehavior(c.Resolve<IPasswordSheetFactory>(), c.Resolve<IEventAggregator>()))
                 .As<IViewModelBehavior<AddEditEntryViewModel>>()
                 .AsSelf()
                 .InstancePerDependency();
 
-            builder.Register(c => new AddEntryViewModelBehavior(c.Resolve<IPasswordSheetFactory>()))
+            builder.Register(c => new AddEntryViewModelBehavior(c.Resolve<IPasswordSheetFactory>(), c.Resolve<IEventAggregator>()))
                 .As<IViewModelBehavior<AddEditEntryViewModel>>()
                 .AsSelf()
                 .InstancePerDependency();

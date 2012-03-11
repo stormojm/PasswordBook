@@ -16,19 +16,19 @@
         </Grid.RowDefinitions>
 
         <TextBlock Grid.Column="0" Grid.Row="0"
-                   Text="Title:" Margin="0,0,3,5"/>
+                   Text="Title:" Margin="0,0,5,5"/>
         <TextBox Grid.Column="1" Grid.Row="0"
                  Margin="0,0,0,5"
                  Text="{Binding Title, UpdateSourceTrigger=PropertyChanged}" />
 
         <TextBlock Grid.Column="0" Grid.Row="1"
-                   Text="User name:" Margin="0,0,3,5"/>
+                   Text="User name:" Margin="0,0,5,5"/>
         <TextBox Grid.Column="1" Grid.Row="1"
                  Margin="0,0,0,5"
                  Text="{Binding UserName, UpdateSourceTrigger=PropertyChanged}" />
 
         <TextBlock Grid.Column="0" Grid.Row="2"
-                   Text="Password:" Margin="0,0,3,5" />
+                   Text="Password:" Margin="0,0,5,5" />
         <TextBox Grid.Column="1" Grid.Row="2"
                  Margin="0,0,0,5"
                  Text="{Binding Password, UpdateSourceTrigger=PropertyChanged}" />

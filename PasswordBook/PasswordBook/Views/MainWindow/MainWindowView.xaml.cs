@@ -1,11 +1,15 @@
 ﻿using System.Windows;
+using System.Windows.Input;
 namespace PasswordBook.Views.MainWindow
 {
     public partial class MainWindowView
     {
+        private MainWindowViewModel _viewModel;
+
         public MainWindowView(MainWindowViewModel viewModel)
         {
-            DataContext = viewModel;
+            _viewModel = viewModel;
+            DataContext = _viewModel;
             InitializeComponent();
         }
 
@@ -17,6 +21,14 @@ namespace PasswordBook.Views.MainWindow
         private void TextBoxLostFocus(object sender, RoutedEventArgs e)
         {
             searchButton.IsDefault = false;
+        }
+
+        public void ItemDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if (_viewModel.EditCommand.CanExecute(null))
+            {
+                _viewModel.EditCommand.Execute(null);
+            }
         }
     }
 }

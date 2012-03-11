@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using PasswordBook.Core;
 using PasswordBook.Contracts;
 using PasswordBook.Messages;
 
@@ -26,6 +27,7 @@ namespace PasswordBook.Views.MainWindow
             _viewModel.SearchCommand = new RelayCommand(Search);
 
             _eventBroker.Subscribe<MasterPasswordEntered>(OnMasterPasswordEntered);
+            _eventBroker.Subscribe<RefreshSearch>(OnRefreshSearchRequested);
         }
 
         private void OnMasterPasswordEntered(MasterPasswordEntered message)
@@ -33,13 +35,17 @@ namespace PasswordBook.Views.MainWindow
             Search(null);
         }
 
+        private void OnRefreshSearchRequested(RefreshSearch message)
+        {
+            Search(null);
+        }
 
         private void Search(object parameter)
         {
             IEnumerable<PasswordEntry> searchResults = _passwordSheetFactory.Get().GetAll();
             if (!String.IsNullOrEmpty(_viewModel.SearchText))
             {
-                searchResults = searchResults.Where(entry => entry.Title.Contains(_viewModel.SearchText));
+                searchResults = searchResults.Where(entry => entry.Title.Contains(_viewModel.SearchText, StringComparison.CurrentCultureIgnoreCase));
             }
 
             _viewModel.SearchResults = new ObservableCollection<PasswordEntry>(searchResults);
