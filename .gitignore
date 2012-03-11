@@ -4,6 +4,7 @@
 *.class
 *.dll
 *.exe
+*.vhost.exe
 *.o
 *.so
 *.g.i.cs
