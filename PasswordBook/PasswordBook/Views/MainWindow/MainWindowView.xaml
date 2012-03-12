@@ -5,11 +5,12 @@
         xmlns:pbc="clr-namespace:PasswordBook.Contracts"
         xmlns:pbae="clr-namespace:PasswordBook.Views.AddEditEntry"
         xmlns:pbmp="clr-namespace:PasswordBook.Views.MasterPasswordEntry"
+        xmlns:pbcb="clr-namespace:PasswordBook.Views.CommandBar"
         Icon="pack://application:,,,/Resources/ApplicationIcon.ico"
         Title="Password Book" 
         UseLayoutRounding="True"
         TextOptions.TextFormattingMode="Display"
-        Height="350" Width="525"
+        Height="500" Width="650"
         MinWidth="300" MinHeight="200">
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter" />
@@ -79,85 +80,10 @@
             </Setter>
         </Style>
 
-        <Style x:Key="ImageButtonStyle" TargetType="{x:Type ButtonBase}">
-            <Setter Property="FocusVisualStyle" Value="{StaticResource ButtonFocusVisual}"/>
-            <Setter Property="Background">
-                <Setter.Value>
-                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                        <GradientStop Color="WhiteSmoke" Offset="0" />
-                        <GradientStop Color="#F1F1F1" Offset="1" />
-                    </LinearGradientBrush>
-                </Setter.Value>
-            </Setter>
-            <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="BorderBrush" Value="#D9D9D9"/>
-            <Setter Property="Foreground" Value="White" />
-            <Setter Property="FontWeight" Value="SemiBold" />
-            <Setter Property="HorizontalContentAlignment" Value="Center"/>
-            <Setter Property="VerticalContentAlignment" Value="Center"/>
-            <Setter Property="Padding" Value="3"/>
-            <Setter Property="Margin" Value="3"/>
-            <Setter Property="Height" Value="27" />
-            <Setter Property="Width" Value="54" />
-            <Setter Property="RenderTransform">
-                <Setter.Value>
-                    <TranslateTransform X="0" Y="0" />
-                </Setter.Value>
-            </Setter>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type ButtonBase}">
-                        <Border Background="{TemplateBinding Background}"
-                                BorderBrush="{TemplateBinding BorderBrush}"
-                                BorderThickness="{TemplateBinding BorderThickness}"
-                                CornerRadius="2"
-                                SnapsToDevicePixels="true">
-                            <ContentPresenter Margin="{TemplateBinding Padding}"
-                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                                              HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                              RecognizesAccessKey="True"
-                                              SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="BorderBrush" Value="#C6C6C6" />
-                                <Setter Property="Background">
-                                    <Setter.Value>
-                                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                                            <GradientStop Color="#F8F8F8" Offset="0" />
-                                            <GradientStop Color="#F1F1F1" Offset="1" />
-                                        </LinearGradientBrush>
-                                    </Setter.Value>
-                                </Setter>
-                            </Trigger>
-                            <Trigger Property="IsEnabled" Value="False">
-                                <Trigger.EnterActions>
-                                    <BeginStoryboard>
-                                        <Storyboard>
-                                            <DoubleAnimation To="0" Storyboard.TargetProperty="Opacity" Duration="0:0:0.2"/>
-                                            <DoubleAnimation To="10" Storyboard.TargetProperty="RenderTransform.(TranslateTransform.X)" Duration="0:0:0.2" />
-                                        </Storyboard>
-                                    </BeginStoryboard>
-                                </Trigger.EnterActions>
-                                <Trigger.ExitActions>
-                                    <BeginStoryboard>
-                                        <Storyboard>
-                                            <DoubleAnimation To="1" Storyboard.TargetProperty="Opacity" Duration="0:0:0.2"/>
-                                            <DoubleAnimation To="0" Storyboard.TargetProperty="RenderTransform.(TranslateTransform.X)" Duration="0:0:0.2" />
-                                        </Storyboard>
-                                    </BeginStoryboard>
-                                </Trigger.ExitActions>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
         <Style x:Key="VerticalElementStyle" TargetType="TextBlock">
             <Setter Property="VerticalAlignment" Value="Center" />
             <Setter Property="TextTrimming" Value="CharacterEllipsis" />
-            <Setter Property="Margin" Value="0,0,3,0" />
+            <Setter Property="Margin" Value="5,0,3,0" />
         </Style>
 
         <DataTemplate DataType="{x:Type pbae:AddEditEntryViewModel}">
@@ -167,21 +93,24 @@
         <DataTemplate DataType="{x:Type pbmp:MasterPasswordEntryViewModel}">
             <pbmp:MasterPasswordEntryView DataContext="{Binding}" />
         </DataTemplate>
+
+        <DataTemplate DataType="{x:Type pbcb:CommandBarViewModel}">
+            <pbcb:CommandBarView DataContext="{Binding}" />
+        </DataTemplate>
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
         
         <Border Background="WhiteSmoke"
                 BorderThickness="0,0,0,1"
-                BorderBrush="#E5E5E5"
-                Grid.ColumnSpan="2">
+                BorderBrush="#E5E5E5">
             <Grid Margin="22">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
@@ -189,6 +118,7 @@
                 </Grid.ColumnDefinitions>
                 
                 <TextBox Grid.Column="0"
+                         FontSize="16"
                          VerticalContentAlignment="Center"
                          GotFocus="TextBoxGotFocus"
                          LostFocus="TextBoxLostFocus"
@@ -203,7 +133,7 @@
             </Grid>
         </Border>
         
-        <DataGrid Grid.Row="1"
+        <DataGrid Grid.Row="2"
                   BorderThickness="0"
                   ItemsSource="{Binding SearchResults}"
                   AutoGenerateColumns="False"
@@ -213,7 +143,9 @@
                   GridLinesVisibility="None"
                   SelectionUnit="FullRow"
                   IsReadOnly="True"
-                  Background="White">
+                  Background="White"
+                  Cursor="Hand"
+                  Margin="11,0,0,0">
             <DataGrid.Resources>
                 <Style x:Key="ScrollBarPageButton" TargetType="{x:Type RepeatButton}">
                     <Setter Property="SnapsToDevicePixels" Value="True" />
@@ -259,7 +191,7 @@
                         BorderBrush="Transparent"
                         Background="Transparent" />
 
-                        <Track x:Name="PART_Track" Grid.Row="0" IsDirectionReversed="true" Margin="0,-1,-1,-1">
+                        <Track x:Name="PART_Track" Grid.Row="0" IsDirectionReversed="true" Margin="0">
                             <Track.DecreaseRepeatButton>
                                 <RepeatButton Style="{StaticResource ScrollBarPageButton}" Command="ScrollBar.PageUpCommand" />
                             </Track.DecreaseRepeatButton>
@@ -290,6 +222,7 @@
                     <Setter Property="Orientation" Value="Vertical" />
                     <Setter Property="Width" Value="12" />
                     <Setter Property="Height" Value="Auto" />
+                    <Setter Property="Margin" Value="15,0,0,0" />
                     <Setter Property="Template" Value="{StaticResource VerticalScrollBar}" />
                 </Style>
             </DataGrid.Resources>
@@ -297,54 +230,41 @@
                 <Style TargetType="DataGridRow">
                     <Setter Property="Height" Value="30" />
                     <Setter Property="BorderThickness" Value="0,0,0,1" />
-                    <Setter Property="BorderBrush" Value="#EFEFEF" />
+                    <Setter Property="BorderBrush" Value="#E5E5E5" />
+                    <Setter Property="Background" Value="#F3F3F3" />
                     <EventSetter Event="MouseDoubleClick" Handler="ItemDoubleClick" />
                 </Style>
             </DataGrid.RowStyle>
             <DataGrid.CellStyle>
                 <Style TargetType="DataGridCell">
-                    <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
                     <Setter Property="BorderThickness" Value="0" />
+                    <Style.Triggers>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="Background" Value="#FFFFCC" />
+                            <Setter Property="Foreground" Value="Black" />
+                        </Trigger>
+                    </Style.Triggers>
                 </Style>
             </DataGrid.CellStyle>
             <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding Title}" Width="*" ElementStyle="{StaticResource VerticalElementStyle}" />
                 <DataGridTextColumn Binding="{Binding UserName}" Width="*" MaxWidth="90" ElementStyle="{StaticResource VerticalElementStyle}" />
-                <DataGridTextColumn Binding="{Binding Password}" Width="*" MaxWidth="90" ElementStyle="{StaticResource VerticalElementStyle}"/>
+                <DataGridTextColumn Binding="{Binding Password}" Width="*" MaxWidth="90" ElementStyle="{StaticResource VerticalElementStyle}" />
             </DataGrid.Columns>
         </DataGrid>
 
-        <ContentControl Grid.Row="1" 
+        <ContentControl Grid.Row="2" 
                         Content="{Binding AddEntryViewModel}"
                         Visibility="{Binding AddEntryViewModel.IsOpen, Converter={StaticResource BoolToVisibilityConverter}}"/>
 
-        <ContentControl Grid.Row="1" 
+        <ContentControl Grid.Row="2" 
                         Content="{Binding EditEntryViewModel}"
                         Visibility="{Binding EditEntryViewModel.IsOpen, Converter={StaticResource BoolToVisibilityConverter}}"/>
 
-        <ItemsControl Grid.Row="1" Grid.Column="1"
-                      BorderThickness="1,0,0,0"
-                      BorderBrush="#E5E5E5"
-                      Focusable="False">
-            <Button ToolTip="Add a new password entry"
-                    Style="{StaticResource ImageButtonStyle}"
-                    Command="{Binding AddCommand}">
-                <Image Source="pack://application:,,,/Resources/Add.ico" />
-            </Button>
-            <Button ToolTip="Edit selected password entry"
-                    Style="{StaticResource ImageButtonStyle}"
-                    Command="{Binding EditCommand}">
-                <Image Source="pack://application:,,,/Resources/Edit.ico" Margin="7,0,0,0" />
-            </Button>
-            <Button ToolTip="Remove selected password entries"
-                    Style="{StaticResource ImageButtonStyle}"
-                    Command="{Binding RemoveCommand}">
-                <Image Source="pack://application:,,,/Resources/Delete.ico" />
-            </Button>
-        </ItemsControl>
+        <ContentControl Grid.Row="1"
+                        Content="{Binding CommandBarViewModel}" />
 
         <ContentControl Grid.RowSpan="3"
-                        Grid.ColumnSpan="2"
                         Content="{Binding MasterPasswordEntryViewModel}"
                         Visibility="{Binding MasterPasswordEntryViewModel.IsOpen, Converter={StaticResource BoolToVisibilityConverter}}" />
     </Grid>

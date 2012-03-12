@@ -18,10 +18,6 @@ namespace PasswordBook.Views.AddEditEntry
             behaviors.InitializeAll(this);
         }
 
-        public ICommand SaveCommand { get; set; }
-
-        public ICommand CancelCommand { get; set; }
-
         public bool IsOpen
         {
             get { return _isOpen; }

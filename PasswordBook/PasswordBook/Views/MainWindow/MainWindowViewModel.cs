@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Windows.Input;
 using PasswordBook.Contracts;
 using PasswordBook.Views.AddEditEntry;
+using PasswordBook.Views.CommandBar;
 using PasswordBook.Views.MasterPasswordEntry;
 
 namespace PasswordBook.Views.MainWindow
@@ -11,30 +12,25 @@ namespace PasswordBook.Views.MainWindow
     public class MainWindowViewModel : INotifyPropertyChanged
     {
         private string _searchText;
+        private ObservableCollection<PasswordEntry> _searchResults;
+        private PasswordEntry _selectedResult;
 
         public MainWindowViewModel(
             IEnumerable<IViewModelBehavior<MainWindowViewModel>> behaviors,
             AddEditEntryViewModel addEntryViewModel,
             AddEditEntryViewModel editEntryViewModel,
-            MasterPasswordEntryViewModel masterPassword)
+            MasterPasswordEntryViewModel masterPassword,
+            CommandBarViewModel commandBarViewModel)
         {
             AddEntryViewModel = addEntryViewModel;
             EditEntryViewModel = editEntryViewModel;
             MasterPasswordEntryViewModel = masterPassword;
+            CommandBarViewModel = commandBarViewModel;
 
             behaviors.InitializeAll(this);
         }
 
-        private ObservableCollection<PasswordEntry> _searchResults;
-        private PasswordEntry _selectedResult;
-
         public ICommand SearchCommand { get; set; }
-
-        public ICommand AddCommand { get; set; }
-
-        public ICommand EditCommand { get; set; }
-
-        public ICommand RemoveCommand { get; set; }
 
         public string SearchText
         {
@@ -51,6 +47,8 @@ namespace PasswordBook.Views.MainWindow
         public AddEditEntryViewModel AddEntryViewModel { get; set; }
 
         public MasterPasswordEntryViewModel MasterPasswordEntryViewModel { get; set; }
+
+        public CommandBarViewModel CommandBarViewModel { get; set; }
 
         public ObservableCollection<PasswordEntry> SearchResults
         {

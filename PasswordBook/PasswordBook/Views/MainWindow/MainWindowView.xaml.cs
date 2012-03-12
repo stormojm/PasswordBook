@@ -25,9 +25,9 @@ namespace PasswordBook.Views.MainWindow
 
         public void ItemDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            if (_viewModel.EditCommand.CanExecute(null))
+            if (_viewModel.CommandBarViewModel.EditCommand.CanExecute(null))
             {
-                _viewModel.EditCommand.Execute(null);
+                _viewModel.CommandBarViewModel.EditCommand.Execute(null);
             }
         }
     }

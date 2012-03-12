@@ -10,6 +10,7 @@ using PasswordBook.Core;
 using PasswordBook.Views.AddEditEntry;
 using PasswordBook.Views.MainWindow;
 using PasswordBook.Views.MasterPasswordEntry;
+using PasswordBook.Views.CommandBar;
 
 namespace PasswordBook
 {
@@ -25,8 +26,16 @@ namespace PasswordBook
                                     c.Resolve<IEnumerable<IViewModelBehavior<MainWindowViewModel>>>(),
                                     c.ResolveNamed<AddEditEntryViewModel>("addEntry"),
                                     c.ResolveNamed<AddEditEntryViewModel>("editEntry"),
-                                    c.Resolve<MasterPasswordEntryViewModel>()))
+                                    c.Resolve<MasterPasswordEntryViewModel>(),
+                                    c.Resolve<CommandBarViewModel>()))
                 .AsSelf()
+                .InstancePerDependency();
+
+            builder.Register(c => new CommandBarViewModel(c.Resolve<IEnumerable<IViewModelBehavior<CommandBarViewModel>>>()))
+                .AsSelf()
+                .InstancePerDependency();
+            builder.Register(c => new CommandCollectionViewModelBehavior())
+                .As<IViewModelBehavior<CommandBarViewModel>>()
                 .InstancePerDependency();
 
             builder.Register(c => new AddEditEntryViewModel(new[] { c.Resolve<AddEntryViewModelBehavior>() }))
@@ -38,22 +47,25 @@ namespace PasswordBook
                 .InstancePerDependency();
 
             builder.Register(c => new EditEntryViewModelBehavior(c.Resolve<IPasswordSheetFactory>(), c.Resolve<IEventAggregator>()))
+                .As<IViewModelBehavior<CommandBarViewModel>>()
                 .As<IViewModelBehavior<AddEditEntryViewModel>>()
                 .AsSelf()
-                .InstancePerDependency();
+                .SingleInstance();
 
             builder.Register(c => new AddEntryViewModelBehavior(c.Resolve<IPasswordSheetFactory>(), c.Resolve<IEventAggregator>()))
+                .As<IViewModelBehavior<CommandBarViewModel>>()
                 .As<IViewModelBehavior<AddEditEntryViewModel>>()
                 .AsSelf()
-                .InstancePerDependency();
+                .SingleInstance();
 
             builder.Register(c => new MainWindowFactory(c.Resolve<Func<MainWindowViewModel>>()))
                 .As<IMainWindowView>()
                 .InstancePerDependency();
 
-            builder.Register(c => new MainSideBarViewModelBehavior(c.Resolve<IPasswordSheetFactory>()))
+            builder.Register(c => new CommandBarViewModelBehavior(c.Resolve<IPasswordSheetFactory>()))
                 .As<IViewModelBehavior<MainWindowViewModel>>()
-                .InstancePerDependency();
+                .As<IViewModelBehavior<CommandBarViewModel>>()
+                .SingleInstance();
 
             builder.Register(c => new SearchResultsViewModelBehavior(c.Resolve<IEventAggregator>(), c.Resolve<IPasswordSheetFactory>()))
                 .As<IViewModelBehavior<MainWindowViewModel>>()

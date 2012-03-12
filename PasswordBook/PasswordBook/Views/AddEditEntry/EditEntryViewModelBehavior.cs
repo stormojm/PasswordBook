@@ -1,12 +1,14 @@
 ﻿using System;
 using PasswordBook.Contracts;
 using PasswordBook.Messages;
+using PasswordBook.Views.CommandBar;
 
 namespace PasswordBook.Views.AddEditEntry
 {
-    public class EditEntryViewModelBehavior : IViewModelBehavior<AddEditEntryViewModel>
+    public class EditEntryViewModelBehavior : IViewModelBehavior<AddEditEntryViewModel>, IViewModelBehavior<CommandBarViewModel>
     {
         private AddEditEntryViewModel _viewModel;
+        private CommandBarViewModel _commandBarViewModel;
         private IPasswordSheetFactory _passwordSheet;
         private readonly IEventAggregator _eventAggregator;
 
@@ -19,8 +21,13 @@ namespace PasswordBook.Views.AddEditEntry
         public void Initialize(AddEditEntryViewModel viewModel)
         {
             _viewModel = viewModel;
-            _viewModel.SaveCommand = new RelayCommand(Save, CanSave);
-            _viewModel.CancelCommand = new RelayCommand(Cancel);
+        }
+
+        public void Initialize(CommandBarViewModel viewModel)
+        {
+            _commandBarViewModel = viewModel;
+            _commandBarViewModel.EditSaveCommand = new RelayCommand(Save, CanSave);
+            _commandBarViewModel.EditCancelCommand = new RelayCommand(Cancel, CanCancel);
         }
 
         private void Save(object parameter)
@@ -42,9 +49,18 @@ namespace PasswordBook.Views.AddEditEntry
 
         private bool CanSave(object parameter)
         {
+            if (_viewModel == null) return false;
+
             return !String.IsNullOrWhiteSpace(_viewModel.UserName)
                 && !String.IsNullOrWhiteSpace(_viewModel.Password)
                 && !String.IsNullOrWhiteSpace(_viewModel.Title);
+        }
+
+        private bool CanCancel(object parameter)
+        {
+            if (_viewModel == null) return false;
+
+            return _viewModel.IsOpen;
         }
 
         private void Cancel(object parameter)
