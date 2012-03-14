@@ -36,7 +36,7 @@ namespace PasswordBook.Model.Encryption
             try
             {
                 stream = new FileStream(_fileName, FileMode.OpenOrCreate, FileAccess.Write);
-                // stream.SetLength(0);
+                stream.SetLength(0);
 
                 secretKey = GetPasswordBytes();
 
